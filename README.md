@@ -1,11 +1,38 @@
 # Rock-Climbing-Metrics-
 
 ### Overview
+The goal of this project was to analyze the results of a questionnaire completed by 611 rock climbers and identify the most important characteristics associated with climbing ability.
 
 ### Data Source
+This questionnaire was created by Power Company Climbing. Individuals independently completed the questionnaire which consisted of questions about basic demographic information and climbing experience. The questionnaire also included instructions to perform and record the results of physical assessments that assessed the strength of various muscle groups.
 
 ### Tools
+- pandas, numPy, regex - Data Cleaning and Exploration
+- matplotlib, seaborn - Data Visualization
+- statsmodels - Calculating Variance Inflation Factor
+- sklearn - Linear Regression
+
+### Data Cleaning
+- 'Sex' was converted to a boolean variable, with 0 representing Male and 1 representing Female.
+- 'max_boulder_Vgrade' and 'max_sport_YDS' were converted to numerical variables from the V-Scale and the YDS scale, respectively. For example, a 'max_sport' grade of 5.12a/b was represented as 12, while a grade of 5.12c/d was represented as 12.5.
+- Missing values for 'height' and 'weight' were replaced with the median value from the population for the corresponding 'sex'. Missing 'span' data was replaced with the 'height' of the individual.
+- Missing values for physical assessments were replaced with zero. Physical assessments that were missing responses from >40% of respondents were removed from the analysis.
+- 'Height:weight' ratio and 'ape_index' ('span'-'height') were added as additional variables.
+- Variables produced by free response questions ('outdoor_season_months', 'outdoor_days', 'train_exp') were cleaned and converted to numerical variables. When the answer was a numerical range, the lower bound of the range was chosen (e.g 4-6 months was converted to 4.)
 
 ### Analysis
+- The first step of analysis was to look at basic statistical descriptors and create histogram plots for each variable. This identified any issues with data cleaning, mistakes in questionnaire responses, and visualized the distributions of population variables.
+- A correlation heatmap was then generated to examine the correlations between all variables.
+- Several bivariate histograms were created to visualize the relationship between several variable pairs.
+- Variance Inflation Factor (VIF) was calculated to detect the degree of multicollinearity across variables.
+- Separate Multiple Linear Regressions with cross validations were performed with 'max_sport_YDS' and 'max_boulder_Vgrade' as the dependent variables. 'sex', 'total_exp', 'train_exp', 'outdoor_season_months', 'outdoor_days', 'weight:height', 'ape_index', 'pullup', 'pushup', 'continuous', 'maxhang', 'weightedpull', and 'repeaters' were used as the independent variables in both regressions. The regression coefficients for the independent variables were calculated and plotted in each case.
 
-### Conclusion
+### Results
+- The 'sex' of the respondents was 2:1 Male to Female.
+- The median 'max_boulder_Vgrade' and 'max_sport_YDS' grades were V7 and 5.12a/b, respectively.
+- 'Total climbing experience' was left skewed with the most common response of '10+ years', while 'Training experience was right skewed with the most common response of '1-3 years'.
+- 'Height' and 'Age' showed high multicollinearity scores which means that their variation can be represented by other independent variables in the dataset. These variables were held back from the Linear Regression in order to improve the confidence and repeatability of the other regression coefficients. Many of the physical assessment variables also showed elevated multicollinearity scores but were included in the Linear Regression, as their removal weakened the performance of the model.
+- The Linear Regression with 'max_boulder_Vgrade' as the dependent variable had an average R^2 score of .494. The five independet variables with the largest absolute regression coefficients were 'max_hang', 'weight:height' (negative coefficient),'weighted_pull', 'total_exp', and 'outdoor_days'. The Linear Regression with 'max_sport_YDS' as the dependent variable had an average R^2 score of .488. The five independet variables with the largest absolute regression coefficients were 'total_exp', 'outdoor_days', 'weighted_pull', 'repeaters', and 'weight:height' (negative coefficient).
+
+### Interpretation
+
